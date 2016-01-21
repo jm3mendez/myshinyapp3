@@ -1,0 +1,181 @@
+---
+title: "My Shiny Application"
+author: "Jose Mendez"
+date: "1/17/2016"
+output:
+  ioslides_presentation:
+    fig_caption: yes
+    keep_md: yes
+    smaller: yes
+runtime: shiny
+resource_files:
+- myshinyapp3.md
+---
+
+## "Basic Data Exploring" Shiny Application
+
+In this Report we will expose about a simple Shiny Application with interactions in
+two areas: the left input area and rigth ouput side.
+At this time we will show some features of Shiny in this application exposed in the 
+following slides.
+
+The application is called "Basic Data Exploring". Using the Shiny facilities permits 
+you to select between three data sets: { Rock (the default), Pressure and Car }
+
+Once selected the dataset { via dataset selector widget } you can obtain five results, via Tabular UI Schemes:
+ { Caption, Info, Summary, View and Plot } in the top Rigth of the UI page.
+
+## General Application Operation
+
+The DataSets and its variables are:
+  rock:{ area, shape, perimeter and perm }, pressure:{ temperature and pressure },
+  car:{ distance and velocity } 
+
+The results obtained with the Shiny application are:
+
+ 1. Caption, the simple interaction of the caption string.
+ 
+ 2. Info, the dimension and variables of the dataset.
+ 
+ 3. Summary of the data {min, max, mean, median and 1th, 3th Quantiles}.
+ 
+ 4. View, the selected number of rows of the dataset selected.
+ 
+ 5. Plot the dataset in two savour direct and correlation one.
+ 
+
+## Functioning
+
+ 1. You can change the Caption to the default: "Basic Data Exploting and this change is made
+immediately in the output caption area.
+
+ 2. Then you can select the numbers of observations or rows to View of this dataset, by default 7.
+
+ 3. Select the new dataset and automatically its Summary, Plot and View are changed. All the output updates are done in the main panel (the rigth side) and the inputs in the left sides.
+
+ 4. The input plot type (radio buttom) define the type of plot to display, the direct or the correlation one.
+ 
+ 5. When the system start the rock dataset is taken and all is prepared to display selecting the options.
+
+##
+```{r ui, echo=FALSE}
+#ShinyUI(
+#pageWithSidebar(
+
+fluidPage(
+  
+  # Application title
+  titlePanel("Basic Data Exploring..."),
+  
+  # Sidebar with controls to provide a caption, select a dataset, and 
+  # specify the number of observations to view. Note that changes made
+  # to the caption in the textInput control are updated in the output
+  # area immediately as you type...... cellWidths=c("25%", "25%", "25%", "25%") or cellWidths=300
+  sidebarLayout(
+    
+    sidebarPanel(
+      textInput("caption", "Caption:", "Basic Data Exploring (v0.3)"),
+      selectInput("dataset", "Choose a Dataset:", 
+                choices = c("rock", "pressure", "cars")),
+      numericInput("obs", "Number of rows to View:", 7),
+      radioButtons("ptype","Choose Plot Type:", list("Direct","Correlation"))
+    ),
+
+  # Show the caption, a summary of the dataset and an HTML table with
+  # the requested number of observations
+
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Caption", h4(textOutput("caption"))), 
+        tabPanel("Info",   textOutput("str")), 
+        tabPanel("Summary", verbatimTextOutput("summary")),
+        tabPanel("View",  tableOutput("view")),
+        tabPanel("PLot",  plotOutput("Plot"))
+        )
+      )
+  ) # Sidebar Layout
+  
+) # Fluid Page1
+
+#)
+#)
+```
+
+```{r server, echo=FALSE}
+# Define server logic required to summarize and view the selected dataset
+# shinyServer(function(input, output) {
+
+  # By declaring datasetInput as a reactive expression we ensure that:
+  #
+  #  1) It is only called when the inputs it depends on changes
+  #  2) The computation and result are shared by all the callers (it 
+  #     only executes a single time)
+  #
+  datasetInput <- reactive({
+    switch(input$dataset,
+           "rock" = rock,
+           "pressure" = pressure,
+           "cars" = cars)
+  })
+
+  # The output$caption is computed based on a reactive expression that
+  # returns input$caption. When the user changes the "caption" field:
+  #
+  #  1) This expression is automatically called to recompute the output 
+  #  2) The new caption is pushed back to the browser for re-display
+  # 
+  # Note that because the data-oriented reactive expressions below don't 
+  # depend on input$caption, those expressions are NOT called when 
+  # input$caption changes.
+  output$caption <- renderText({
+    input$caption        #," [rows= ",dim(datasetInput())[1]," cols= ",dim(datasetInput()[2]),"]" )
+  })
+
+  output$str <- renderText({
+    mynames=""
+    for( i in (1: dim(datasetInput())[2]) ) mynames=paste(mynames," ",names(datasetInput())[i])
+    paste("DataSet Dimension: ",dim(datasetInput())[1]," rows ",dim(datasetInput())[2]," Columns, \n and its variables  are(",dim(datasetInput())[2],"): \n ", mynames )
+  })
+  # The output$summary depends on the datasetInput reactive expression, 
+  # so will be re-executed whenever datasetInput is invalidated
+  # (i.e. whenever the input$dataset changes)
+  output$summary <- renderPrint({
+    dataset <- datasetInput()
+    summary(dataset)
+  })
+
+  # The output$view depends on both the databaseInput reactive expression
+  # and input$obs, so will be re-executed whenever input$dataset or 
+  # input$obs is changed. 
+  output$view <- renderTable({
+    dataset <- datasetInput()
+    nrows <- dim(dataset)[1]
+    head(dataset,input$obs)
+  })
+  
+ # The outpua Plot is configured in the server side
+  
+  panel.cor <- function(x, y, digits=2, prefix="", cex.cor, ...)
+{
+    usr <- par("usr"); on.exit(par(usr))
+    par(usr = c(0, 1, 0, 1))
+    r <- abs(cor(x, y))
+    txt <- format(c(r, 0.123456789), digits=digits)[1]
+    txt <- paste(prefix, txt, sep="")
+    if(missing(cex.cor)) cex.cor <- 0.8/strwidth(txt)
+    text(0.5, 0.5, txt, cex = cex.cor * r)
+}
+
+  output$Plot <- renderPlot ({
+    if(input$ptype=="Direct"){
+      plot(datasetInput(),col='red',lwd=1,main="Direct Relation Plot")
+      lines(datasetInput(),col='blue',lwd=1)
+    }
+    else {
+      pairs(datasetInput(),ltype=1,lwd=2,main="Correlation Plot",
+            lower.panel=panel.smooth, upper.panel=panel.cor)
+    }
+   })
+
+  #})
+```
