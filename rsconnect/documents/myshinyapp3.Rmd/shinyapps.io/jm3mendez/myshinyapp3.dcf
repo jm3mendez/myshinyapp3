@@ -1,0 +1,9 @@
+name: myshinyapp3
+account: jm3mendez
+server: shinyapps.io
+bundleId: 353837
+url: https://jm3mendez.shinyapps.io/myshinyapp3/
+when: 1453331696.80873
+asMultiple: FALSE
+asStatic: FALSE
+additionalFiles: myshinyapp3.md
