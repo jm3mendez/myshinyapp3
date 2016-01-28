@@ -9,6 +9,9 @@ it require a shiny server the it is in: https://jm3mendez.shinyapps.io/myshinyap
 
 The R markdown Rpresentation Report called myshinyapp333 the ,rmd, .html, .md files were added and it is available in www.rpubs.com/jmendez/myshinyapp333
 
+The shiny application in the shiny server is in
+https://jm3mendez.shinyapps.io/myshinyapp3
+
 This application just show some basic interactive features of shiny tool, like inputs widgets, radio buttom, selector widget and caption in the ouput a text form verbatim, table one, and plot output area in two selected way directly or correlated one.
 
 
