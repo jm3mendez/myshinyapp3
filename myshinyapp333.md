@@ -73,6 +73,8 @@ immediately in the output caption area.
 === 
 All the programs and Documents associated
  
+* The interactive pitch report that require a shiny server in:
+  <Shiny Pitch Report> (https://jm3mendez.shinyapps.io/myshinyapp33)
 * Github Sources of the Shiny Application ( server.R, ui.R, Docs and more ) 
   <jm3mendez Github> (https://github.com/jm3mendez/myshinyapp3)
 * The shiny Application alone 
