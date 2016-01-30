@@ -1,6 +1,8 @@
 library(shiny)
 library(datasets)
 
+message="Note: Use this Application, just selecting the Dataset and the adequated Top middle selector and be Dataset Informed, Viewed(number of rows), Summaried and Plotted in the Direct and Correlated way" 
+
 # Define server logic required to summarize and view the selected dataset
 
 # Define server logic required to summarize and view the selected dataset
@@ -30,6 +32,10 @@ shinyServer(function(input, output) {
   # input$caption changes.
   output$caption <- renderText({
     input$caption        #," [rows= ",dim(datasetInput())[1]," cols= ",dim(datasetInput()[2]),"]" )
+  })
+
+  output$message <- renderText({
+    message        #," [rows= ",dim(datasetInput())[1]," cols= ",dim(datasetInput()[2]),"]" )
   })
 
   output$str <- renderText({
@@ -69,7 +75,7 @@ shinyServer(function(input, output) {
 
   output$Plot <- renderPlot ({
     if(input$ptype=="Direct"){
-      plot(datasetInput(),col='red',ltype=1,lwd=1,main="Direct Relation Plot")
+      plot(datasetInput(),col='red',lwd=1,main="Direct Relation Plot")
       lines(datasetInput(),col='blue',lwd=1)
     }
     else {

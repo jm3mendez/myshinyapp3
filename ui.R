@@ -1,10 +1,12 @@
 library(shiny)
 
+message="just select the Dataset and the adequated Top middle selector and be Dataset Informed, Viewed, Summaried and plotted in the direct and correlated way" 
+
 # Define UI for dataset viewer application
 shinyUI( fluidPage(
 
   # Application title
-  titlePanel("Basic Data Exploring..."),
+  titlePanel("Basic Data Exploring... just select the Dataset and play..."),
 
   # Sidebar with controls to provide a caption, select a dataset, and 
   # specify the number of observations to view. Note that changes made
@@ -30,7 +32,8 @@ shinyUI( fluidPage(
         tabPanel("Summary", verbatimTextOutput("summary")),
         tabPanel("View",  tableOutput("view")),
         tabPanel("PLot",  plotOutput("Plot"))
-        )
+        ),
+      textOutput("message")
       )
     ) # Sidebar Layout
 
