@@ -1,6 +1,6 @@
 library(shiny)
 
-message="just select the Dataset and the adequated Top middle selector and be Dataset Informed, Viewed, Summaried and plotted in the direct and correlated way" 
+#message="just select the Dataset and the adequated Top middle selector and be Dataset Informed, Viewed, Summaried and plotted in the direct and correlated way" 
 
 # Define UI for dataset viewer application
 shinyUI( fluidPage(

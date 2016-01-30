@@ -1,7 +1,7 @@
 library(shiny)
 library(datasets)
 
-message="Note: Use this Application, just selecting the Dataset and the adequated Top middle selector and be Dataset Informed, Viewed(number of rows), Summaried and Plotted in the Direct and Correlated way" 
+message="Note: Use this Application, just selecting the Dataset and the adequated Top middle selector and be Dataset Informed, Viewed(number of rows), Summaried and Plotted in the Direct and Correlated way." 
 
 # Define server logic required to summarize and view the selected dataset
 
